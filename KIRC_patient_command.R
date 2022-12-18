@@ -662,3 +662,40 @@ reversed_number_KO_BMN_D26_FC_indownlist <- KO_BMN_D26_FC_indownlist[KO_BMN_D26_
 reversed_number_KO_DAC_BMN_D5_FC_indownlist <- KO_DAC_BMN_D5_FC_indownlist[KO_DAC_BMN_D5_FC_indownlist$logFC>1,]#349
 reversed_number_KO_DAC_BMN_D16_FC_indownlist <- KO_DAC_BMN_D16_FC_indownlist[KO_DAC_BMN_D16_FC_indownlist$logFC>1,]#231
 reversed_number_KO_DAC_BMN_D26_FC_indownlist <- KO_DAC_BMN_D26_FC_indownlist[KO_DAC_BMN_D26_FC_indownlist$logFC>1,]#103
+
+###run pathway analysis
+#pathway analysis of reversed_number_WT_DAC_BMN_D5_FC_inuplist
+GO_reversed_number_WT_DAC_BMN_D5_FC_inuplist <- reversed_number_WT_DAC_BMN_D5_FC_inuplist$X
+GO_geneLists_reversed_number_WT_DAC_BMN_D5_FC_inuplist=data.frame(ensembl_id=GO_reversed_number_WT_DAC_BMN_D5_FC_inuplist)
+GO_results_reversed_number_WT_DAC_BMN_D5_FC_inuplist=merge(GO_geneLists_reversed_number_WT_DAC_BMN_D5_FC_inuplist,EG2Ensembl,by.x='ensembl_id',all.x=T)
+GO_id_reversed_number_WT_DAC_BMN_D5_FC_inuplist=na.omit(GO_results_reversed_number_WT_DAC_BMN_D5_FC_inuplist$gene_id)
+GO_ego_reversed_number_WT_DAC_BMN_D5_FC_inuplist <- enrichGO(OrgDb = "org.Hs.eg.db",gene = GO_id_reversed_number_WT_DAC_BMN_D5_FC_inuplist, ont="BP", pvalueCutoff = 0.05, readable = TRUE)
+dotplot(GO_ego_reversed_number_WT_DAC_BMN_D5_FC_inuplist,showCategory=20,title="Enrichment GO reversed_number_WT_DAC_BMN_D5_FC_inuplist")
+barplot(GO_ego_reversed_number_WT_DAC_BMN_D5_FC_inuplist,showCategory=20,title="Enrichment GO reversed_number_WT_DAC_BMN_D5_FC_inuplist")
+
+#pathway analysis of reversed_number_KO_DAC_BMN_D5_FC_inuplist
+GO_reversed_number_KO_DAC_BMN_D5_FC_inuplist <- reversed_number_KO_DAC_BMN_D5_FC_inuplist$X
+GO_geneLists_reversed_number_KO_DAC_BMN_D5_FC_inuplist=data.frame(ensembl_id=GO_reversed_number_KO_DAC_BMN_D5_FC_inuplist)
+GO_results_reversed_number_KO_DAC_BMN_D5_FC_inuplist=merge(GO_geneLists_reversed_number_KO_DAC_BMN_D5_FC_inuplist,EG2Ensembl,by.x='ensembl_id',all.x=T)
+GO_id_reversed_number_KO_DAC_BMN_D5_FC_inuplist=na.omit(GO_results_reversed_number_KO_DAC_BMN_D5_FC_inuplist$gene_id)
+GO_ego_reversed_number_KO_DAC_BMN_D5_FC_inuplist <- enrichGO(OrgDb = "org.Hs.eg.db",gene = GO_id_reversed_number_KO_DAC_BMN_D5_FC_inuplist, ont="BP", pvalueCutoff = 0.05, readable = TRUE)
+dotplot(GO_ego_reversed_number_KO_DAC_BMN_D5_FC_inuplist,showCategory=20,title="Enrichment GO reversed_number_KO_DAC_BMN_D5_FC_inuplist")
+barplot(GO_ego_reversed_number_KO_DAC_BMN_D5_FC_inuplist,showCategory=20,title="Enrichment GO reversed_number_KO_DAC_BMN_D5_FC_inuplist")
+
+#pathway analysis of reversed_number_WT_DAC_BMN_D5_FC_indownlist
+GO_reversed_number_WT_DAC_BMN_D5_FC_indownlist <- reversed_number_WT_DAC_BMN_D5_FC_indownlist$X
+GO_geneLists_reversed_number_WT_DAC_BMN_D5_FC_indownlist=data.frame(ensembl_id=GO_reversed_number_WT_DAC_BMN_D5_FC_indownlist)
+GO_results_reversed_number_WT_DAC_BMN_D5_FC_indownlist=merge(GO_geneLists_reversed_number_WT_DAC_BMN_D5_FC_indownlist,EG2Ensembl,by.x='ensembl_id',all.x=T)
+GO_id_reversed_number_WT_DAC_BMN_D5_FC_indownlist=na.omit(GO_results_reversed_number_WT_DAC_BMN_D5_FC_indownlist$gene_id)
+GO_ego_reversed_number_WT_DAC_BMN_D5_FC_indownlist <- enrichGO(OrgDb = "org.Hs.eg.db",gene = GO_id_reversed_number_WT_DAC_BMN_D5_FC_indownlist, ont="BP", pvalueCutoff = 0.05, readable = TRUE)
+dotplot(GO_ego_reversed_number_WT_DAC_BMN_D5_FC_indownlist,showCategory=20,title="Enrichment GO reversed_number_WT_DAC_BMN_D5_FC_indownlist")
+barplot(GO_ego_reversed_number_WT_DAC_BMN_D5_FC_indownlist,showCategory=20,title="Enrichment GO reversed_number_WT_DAC_BMN_D5_FC_indownlist")
+
+#pathway analysis of reversed_number_KO_DAC_BMN_D5_FC_indownlist
+GO_reversed_number_KO_DAC_BMN_D5_FC_indownlist <- reversed_number_KO_DAC_BMN_D5_FC_indownlist$X
+GO_geneLists_reversed_number_KO_DAC_BMN_D5_FC_indownlist=data.frame(ensembl_id=GO_reversed_number_KO_DAC_BMN_D5_FC_indownlist)
+GO_results_reversed_number_KO_DAC_BMN_D5_FC_indownlist=merge(GO_geneLists_reversed_number_KO_DAC_BMN_D5_FC_indownlist,EG2Ensembl,by.x='ensembl_id',all.x=T)
+GO_id_reversed_number_KO_DAC_BMN_D5_FC_indownlist=na.omit(GO_results_reversed_number_KO_DAC_BMN_D5_FC_indownlist$gene_id)
+GO_ego_reversed_number_KO_DAC_BMN_D5_FC_indownlist <- enrichGO(OrgDb = "org.Hs.eg.db",gene = GO_id_reversed_number_KO_DAC_BMN_D5_FC_indownlist, ont="BP", pvalueCutoff = 0.05, readable = TRUE)
+dotplot(GO_ego_reversed_number_KO_DAC_BMN_D5_FC_indownlist,showCategory=20,title="Enrichment GO reversed_number_KO_DAC_BMN_D5_FC_indownlist")
+barplot(GO_ego_reversed_number_KO_DAC_BMN_D5_FC_indownlist,showCategory=20,title="Enrichment GO reversed_number_KO_DAC_BMN_D5_FC_indownlist")

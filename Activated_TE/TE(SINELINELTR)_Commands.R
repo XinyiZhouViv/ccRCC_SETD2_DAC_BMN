@@ -20,7 +20,7 @@ y<-y[keep_cpm, ,keep.lib.sizes=FALSE] #gene number from 4693511 to 551005
 y <- calcNormFactors(y)
 y$samples #check normalization factor
 TE_list <- y$genes
-#先算filter基因后的z-score
+#z-score
 x <- x[row.names(x)%in%row.names(TE_list),]
 x<-transform(x,mean=rowMeans(x))
 x <-transform(x,sd=apply(x[,1:40],1,sd))
@@ -37,12 +37,12 @@ for (j in 27:40){
 z<-df
 row.names(z)=row.names(x)
 colnames(z)=colnames(x[,1:40])
-#未经筛选的SINE, LINE, LTR list
+#SINE, LINE, LTR list
 SINE <- myTEdata[myTEdata$Classid=="SINE",c(1,2)]
 LINE <- myTEdata[myTEdata$Classid=="LINE",c(1,2)]
 LTR <- myTEdata[myTEdata$Classid=="LTR",c(1,2)]
 
-#将y分成KO vs WT的各组进行比较
+#KO vs WT
 NT_KO_vs_WT <- y[,c(1,2,21,22)]
 D5_DAC_KO_vs_WT <- y[,c(9,10,29,30)]
 D5_BMN_KO_vs_WT <- y[,c(3,4,23,24)]
@@ -134,171 +134,7 @@ results_edgeR_D26_DAC_BMN_KO_vs_WT <- topTags(et_D26_DAC_BMN_KO_vs_WT, n = nrow(
 head(results_edgeR_D26_DAC_BMN_KO_vs_WT$table)
 edgeRt_D26_DAC_BMN_KO_vs_WT <- results_edgeR_D26_DAC_BMN_KO_vs_WT$table
 
-#将y分成Treat vs NT的各组进行比较
-WT_D5_DAC_vs_NT <- y[,c(1,2,9,10)]
-WT_D5_BMN_vs_NT <- y[,c(1,2,3,4)]
-WT_D5_DAC_BMN_vs_NT <- y[,c(1,2,15,16)]
-WT_D16_DAC_vs_NT <- y[,c(1,2,11,12)]
-WT_D16_BMN_vs_NT <- y[,c(1,2,5,6)]
-WT_D16_DAC_BMN_vs_NT <- y[,c(1,2,17,18)]
-WT_D26_DAC_vs_NT <- y[,c(1,2,13,14)]
-WT_D26_BMN_vs_NT <- y[,c(1,2,7,8)]
-WT_D26_DAC_BMN_vs_NT <- y[,c(1,2,19,20)]
-KO_D5_DAC_vs_NT <- y[,c(21,22,29,30)]
-KO_D5_BMN_vs_NT <- y[,c(21,22,23,24)]
-KO_D5_DAC_BMN_vs_NT <- y[,c(21,22,35,36)]
-KO_D16_DAC_vs_NT <- y[,c(21,22,31,32)]
-KO_D16_BMN_vs_NT <- y[,c(21,22,25,26)]
-KO_D16_DAC_BMN_vs_NT <-y[,c(21,22,37,38)]
-KO_D26_DAC_vs_NT <- y[,c(21,22,33,34)]
-KO_D26_BMN_vs_NT <- y[,c(21,22,27,28)]
-KO_D26_DAC_BMN_vs_NT <- y[,c(21,22,39,40)]
-
-z_WT_D5_DAC_vs_NT <- estimateDisp(WT_D5_DAC_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day5","DAC", "Vs", "NT", "is", sqrt(z_WT_D5_DAC_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day5 DAC Vs NT is 0.368956813227943"
-et_WT_D5_DAC_vs_NT <- exactTest(z_WT_D5_DAC_vs_NT)
-results_edgeR_WT_D5_DAC_vs_NT <- topTags(et_WT_D5_DAC_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D5_DAC_vs_NT$table)
-edgeRt_WT_D5_DAC_vs_NT <- results_edgeR_WT_D5_DAC_vs_NT$table
-
-z_WT_D5_BMN_vs_NT <- estimateDisp(WT_D5_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day5","BMN", "Vs", "NT", "is", sqrt(z_WT_D5_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day5 BMN Vs NT is 0.357096861043914"
-et_WT_D5_BMN_vs_NT <- exactTest(z_WT_D5_BMN_vs_NT)
-results_edgeR_WT_D5_BMN_vs_NT <- topTags(et_WT_D5_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D5_BMN_vs_NT$table)
-edgeRt_WT_D5_BMN_vs_NT <- results_edgeR_WT_D5_BMN_vs_NT$table
-
-z_WT_D5_DAC_BMN_vs_NT <- estimateDisp(WT_D5_DAC_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day5","DAC+BMN", "Vs", "NT", "is", sqrt(z_WT_D5_DAC_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day5 DAC+BMN Vs NT is 0.362846536762564"
-et_WT_D5_DAC_BMN_vs_NT <- exactTest(z_WT_D5_DAC_BMN_vs_NT)
-results_edgeR_WT_D5_DAC_BMN_vs_NT <- topTags(et_WT_D5_DAC_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D5_DAC_BMN_vs_NT$table)
-edgeRt_WT_D5_DAC_BMN_vs_NT <- results_edgeR_WT_D5_DAC_BMN_vs_NT$table
-
-z_WT_D16_DAC_vs_NT <- estimateDisp(WT_D16_DAC_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day16","DAC", "Vs", "NT", "is", sqrt(z_WT_D16_DAC_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day16 DAC Vs NT is 0.34653776288664"
-et_WT_D16_DAC_vs_NT <- exactTest(z_WT_D16_DAC_vs_NT)
-results_edgeR_WT_D16_DAC_vs_NT <- topTags(et_WT_D16_DAC_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D16_DAC_vs_NT$table)
-edgeRt_WT_D16_DAC_vs_NT <- results_edgeR_WT_D16_DAC_vs_NT$table
-
-z_WT_D16_BMN_vs_NT <- estimateDisp(WT_D16_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day16","BMN", "Vs", "NT", "is", sqrt(z_WT_D16_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day16 BMN Vs NT is 0.357504956879879"
-et_WT_D16_BMN_vs_NT <- exactTest(z_WT_D16_BMN_vs_NT)
-results_edgeR_WT_D16_BMN_vs_NT <- topTags(et_WT_D16_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D16_BMN_vs_NT$table)
-edgeRt_WT_D16_BMN_vs_NT <- results_edgeR_WT_D16_BMN_vs_NT$table
-
-z_WT_D16_DAC_BMN_vs_NT <- estimateDisp(WT_D16_DAC_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day16","DAC+BMN", "Vs", "NT", "is", sqrt(z_WT_D16_DAC_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day16 DAC+BMN Vs NT is 0.354638705557314"
-et_WT_D16_DAC_BMN_vs_NT <- exactTest(z_WT_D16_DAC_BMN_vs_NT)
-results_edgeR_WT_D16_DAC_BMN_vs_NT <- topTags(et_WT_D16_DAC_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D16_DAC_BMN_vs_NT$table)
-edgeRt_WT_D16_DAC_BMN_vs_NT <- results_edgeR_WT_D16_DAC_BMN_vs_NT$table
-
-z_WT_D26_DAC_vs_NT <- estimateDisp(WT_D26_DAC_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day26","DAC", "Vs", "NT", "is", sqrt(z_WT_D26_DAC_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day26 DAC Vs NT is 0.390073276623852"
-et_WT_D26_DAC_vs_NT <- exactTest(z_WT_D26_DAC_vs_NT)
-results_edgeR_WT_D26_DAC_vs_NT <- topTags(et_WT_D26_DAC_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D26_DAC_vs_NT$table)
-edgeRt_WT_D26_DAC_vs_NT <- results_edgeR_WT_D26_DAC_vs_NT$table
-
-z_WT_D26_BMN_vs_NT <- estimateDisp(WT_D26_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day26","BMN", "Vs", "NT", "is", sqrt(z_WT_D26_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day26 BMN Vs NT is 0.377530274631764"
-et_WT_D26_BMN_vs_NT <- exactTest(z_WT_D26_BMN_vs_NT)
-results_edgeR_WT_D26_BMN_vs_NT <- topTags(et_WT_D26_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D26_BMN_vs_NT$table)
-edgeRt_WT_D26_BMN_vs_NT <- results_edgeR_WT_D26_BMN_vs_NT$table
-
-z_WT_D26_DAC_BMN_vs_NT <- estimateDisp(WT_D26_DAC_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of WT Day26","DAC+BMN", "Vs", "NT", "is", sqrt(z_WT_D26_DAC_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of WT Day26 DAC+BMN Vs NT is 0.365728638477629"
-et_WT_D26_DAC_BMN_vs_NT <- exactTest(z_WT_D26_DAC_BMN_vs_NT)
-results_edgeR_WT_D26_DAC_BMN_vs_NT <- topTags(et_WT_D26_DAC_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_WT_D26_DAC_BMN_vs_NT$table)
-edgeRt_WT_D26_DAC_BMN_vs_NT <- results_edgeR_WT_D26_DAC_BMN_vs_NT$table
-
-z_KO_D5_DAC_vs_NT <- estimateDisp(KO_D5_DAC_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day5","DAC", "Vs", "NT", "is", sqrt(z_KO_D5_DAC_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day5 DAC Vs NT is 0.353748772788042"
-et_KO_D5_DAC_vs_NT <- exactTest(z_KO_D5_DAC_vs_NT)
-results_edgeR_KO_D5_DAC_vs_NT <- topTags(et_KO_D5_DAC_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D5_DAC_vs_NT$table)
-edgeRt_KO_D5_DAC_vs_NT <- results_edgeR_KO_D5_DAC_vs_NT$table
-
-z_KO_D5_BMN_vs_NT <- estimateDisp(KO_D5_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day5","BMN", "Vs", "NT", "is", sqrt(z_KO_D5_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day5 BMN Vs NT is 0.338879963209856"
-et_KO_D5_BMN_vs_NT <- exactTest(z_KO_D5_BMN_vs_NT)
-results_edgeR_KO_D5_BMN_vs_NT <- topTags(et_KO_D5_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D5_BMN_vs_NT$table)
-edgeRt_KO_D5_BMN_vs_NT <- results_edgeR_KO_D5_BMN_vs_NT$table
-
-z_KO_D5_DAC_BMN_vs_NT <- estimateDisp(KO_D5_DAC_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day5","DAC+BMN", "Vs", "NT", "is", sqrt(z_KO_D5_DAC_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day5 DAC+BMN Vs NT is 0.314944636355001"
-et_KO_D5_DAC_BMN_vs_NT <- exactTest(z_KO_D5_DAC_BMN_vs_NT)
-results_edgeR_KO_D5_DAC_BMN_vs_NT <- topTags(et_KO_D5_DAC_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D5_DAC_BMN_vs_NT$table)
-edgeRt_KO_D5_DAC_BMN_vs_NT <- results_edgeR_KO_D5_DAC_BMN_vs_NT$table
-
-z_KO_D16_DAC_vs_NT <- estimateDisp(KO_D16_DAC_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day16","DAC", "Vs", "NT", "is", sqrt(z_KO_D16_DAC_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day16 DAC Vs NT is 0.330929857059437"
-et_KO_D16_DAC_vs_NT <- exactTest(z_KO_D16_DAC_vs_NT)
-results_edgeR_KO_D16_DAC_vs_NT <- topTags(et_KO_D16_DAC_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D16_DAC_vs_NT$table)
-edgeRt_KO_D16_DAC_vs_NT <- results_edgeR_KO_D16_DAC_vs_NT$table
-
-z_KO_D16_BMN_vs_NT <- estimateDisp(KO_D16_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day16","BMN", "Vs", "NT", "is", sqrt(z_KO_D16_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day16 BMN Vs NT is 0.326931720300696"
-et_KO_D16_BMN_vs_NT <- exactTest(z_KO_D16_BMN_vs_NT)
-results_edgeR_KO_D16_BMN_vs_NT <- topTags(et_KO_D16_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D16_BMN_vs_NT$table)
-edgeRt_KO_D16_BMN_vs_NT <- results_edgeR_KO_D16_BMN_vs_NT$table
-
-z_KO_D16_DAC_BMN_vs_NT <- estimateDisp(KO_D16_DAC_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day16","DAC+BMN", "Vs", "NT", "is", sqrt(z_KO_D16_DAC_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day16 DAC+BMN Vs NT is 0.326395743579499"
-et_KO_D16_DAC_BMN_vs_NT <- exactTest(z_KO_D16_DAC_BMN_vs_NT)
-results_edgeR_KO_D16_DAC_BMN_vs_NT <- topTags(et_KO_D16_DAC_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D16_DAC_BMN_vs_NT$table)
-edgeRt_KO_D16_DAC_BMN_vs_NT <- results_edgeR_KO_D16_DAC_BMN_vs_NT$table
-
-z_KO_D26_DAC_vs_NT <- estimateDisp(KO_D26_DAC_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day26","DAC", "Vs", "NT", "is", sqrt(z_KO_D26_DAC_vs_NT$common.dispersion)))
-# "sqrt of common dispersion (BCV) of KO Day26 DAC Vs NT is 0.311368775439774"
-et_KO_D26_DAC_vs_NT <- exactTest(z_KO_D26_DAC_vs_NT)
-results_edgeR_KO_D26_DAC_vs_NT <- topTags(et_KO_D26_DAC_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D26_DAC_vs_NT$table)
-edgeRt_KO_D26_DAC_vs_NT <- results_edgeR_KO_D26_DAC_vs_NT$table
-
-z_KO_D26_BMN_vs_NT <- estimateDisp(KO_D26_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day26","BMN", "Vs", "NT", "is", sqrt(z_KO_D26_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day26 BMN Vs NT is 0.33371195520111"
-et_KO_D26_BMN_vs_NT <- exactTest(z_KO_D26_BMN_vs_NT)
-results_edgeR_KO_D26_BMN_vs_NT <- topTags(et_KO_D26_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D26_BMN_vs_NT$table)
-edgeRt_KO_D26_BMN_vs_NT <- results_edgeR_KO_D26_BMN_vs_NT$table
-
-z_KO_D26_DAC_BMN_vs_NT <- estimateDisp(KO_D26_DAC_BMN_vs_NT)
-print(paste("sqrt of common dispersion (BCV) of KO Day26","DAC+BMN", "Vs", "NT", "is", sqrt(z_KO_D26_DAC_BMN_vs_NT$common.dispersion)))
-# [1] "sqrt of common dispersion (BCV) of KO Day26 DAC+BMN Vs NT is 0.330581673737279"
-et_KO_D26_DAC_BMN_vs_NT <- exactTest(z_KO_D26_DAC_BMN_vs_NT)
-results_edgeR_KO_D26_DAC_BMN_vs_NT <- topTags(et_KO_D26_DAC_BMN_vs_NT, n = nrow(x), sort.by = "none")
-head(results_edgeR_KO_D26_DAC_BMN_vs_NT$table)
-edgeRt_KO_D26_DAC_BMN_vs_NT <- results_edgeR_KO_D26_DAC_BMN_vs_NT$table
-
-#筛选FDR<0.05 和 |logFC| >1的基因
+#FDR<0.05  |logFC| >1
 filter_FDR_0.05_NT_KO_vs_WT_up <- edgeRt_NT_KO_vs_WT[edgeRt_NT_KO_vs_WT$FDR < 0.05 & edgeRt_NT_KO_vs_WT$logFC > 1,]
 filter_FDR_0.05_NT_KO_vs_WT_down <- edgeRt_NT_KO_vs_WT[edgeRt_NT_KO_vs_WT$FDR < 0.05 & edgeRt_NT_KO_vs_WT$logFC < -1,]
 filter_FDR_0.05_D5_DAC_KO_vs_WT_up <- edgeRt_D5_DAC_KO_vs_WT[edgeRt_D5_DAC_KO_vs_WT$FDR < 0.05 & edgeRt_D5_DAC_KO_vs_WT$logFC > 1,]
@@ -324,45 +160,7 @@ filter_FDR_0.05_D26_BMN_KO_vs_WT_down <- edgeRt_D26_BMN_KO_vs_WT[edgeRt_D26_BMN_
 filter_FDR_0.05_D26_DAC_BMN_KO_vs_WT_up <- edgeRt_D26_DAC_BMN_KO_vs_WT[edgeRt_D26_DAC_BMN_KO_vs_WT$FDR < 0.05 & edgeRt_D26_DAC_BMN_KO_vs_WT$logFC > 1,]
 filter_FDR_0.05_D26_DAC_BMN_KO_vs_WT_down <- edgeRt_D26_DAC_BMN_KO_vs_WT[edgeRt_D26_DAC_BMN_KO_vs_WT$FDR < 0.05 & edgeRt_D26_DAC_BMN_KO_vs_WT$logFC < -1,]
 
-filter_FDR_0.05_WT_D5_DAC_vs_NT_up <- edgeRt_WT_D5_DAC_vs_NT[edgeRt_WT_D5_DAC_vs_NT$FDR < 0.05 & edgeRt_WT_D5_DAC_vs_NT$logFC > 1,]
-filter_FDR_0.05_WT_D5_DAC_vs_NT_down <- edgeRt_WT_D5_DAC_vs_NT[edgeRt_WT_D5_DAC_vs_NT$FDR < 0.05 & edgeRt_WT_D5_DAC_vs_NT$logFC < -1,]
-#filter_FDR_0.05_WT_D5_BMN_vs_NT_up <- edgeRt_WT_D5_BMN_vs_NT[edgeRt_WT_D5_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D5_BMN_vs_NT$logFC > 1,]无可用数据
-#filter_FDR_0.05_WT_D5_BMN_vs_NT_down <- edgeRt_WT_D5_BMN_vs_NT[edgeRt_WT_D5_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D5_BMN_vs_NT$logFC < -1,]无可用数据
-filter_FDR_0.05_WT_D5_DAC_BMN_vs_NT_up <- edgeRt_WT_D5_DAC_BMN_vs_NT[edgeRt_WT_D5_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D5_DAC_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_WT_D5_DAC_BMN_vs_NT_down <- edgeRt_WT_D5_DAC_BMN_vs_NT[edgeRt_WT_D5_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D5_DAC_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_WT_D16_DAC_vs_NT_up <- edgeRt_WT_D16_DAC_vs_NT[edgeRt_WT_D16_DAC_vs_NT$FDR < 0.05 & edgeRt_WT_D16_DAC_vs_NT$logFC > 1,]
-filter_FDR_0.05_WT_D16_DAC_vs_NT_down <- edgeRt_WT_D16_DAC_vs_NT[edgeRt_WT_D16_DAC_vs_NT$FDR < 0.05 & edgeRt_WT_D16_DAC_vs_NT$logFC < -1,]
-filter_FDR_0.05_WT_D16_BMN_vs_NT_up <- edgeRt_WT_D16_BMN_vs_NT[edgeRt_WT_D16_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D16_BMN_vs_NT$logFC > 1,]
-#filter_FDR_0.05_WT_D16_BMN_vs_NT_down <- edgeRt_WT_D16_BMN_vs_NT[edgeRt_WT_D16_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D16_BMN_vs_NT$logFC < -1,]无可用数据
-filter_FDR_0.05_WT_D16_DAC_BMN_vs_NT_up <- edgeRt_WT_D16_DAC_BMN_vs_NT[edgeRt_WT_D16_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D16_DAC_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_WT_D16_DAC_BMN_vs_NT_down <- edgeRt_WT_D16_DAC_BMN_vs_NT[edgeRt_WT_D16_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D16_DAC_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_WT_D26_DAC_vs_NT_up <- edgeRt_WT_D26_DAC_vs_NT[edgeRt_WT_D26_DAC_vs_NT$FDR < 0.05 & edgeRt_WT_D26_DAC_vs_NT$logFC > 1,]
-filter_FDR_0.05_WT_D26_DAC_vs_NT_down <- edgeRt_WT_D26_DAC_vs_NT[edgeRt_WT_D26_DAC_vs_NT$FDR < 0.05 & edgeRt_WT_D26_DAC_vs_NT$logFC < -1,]
-filter_FDR_0.05_WT_D26_BMN_vs_NT_up <- edgeRt_WT_D26_BMN_vs_NT[edgeRt_WT_D26_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D26_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_WT_D26_BMN_vs_NT_down <- edgeRt_WT_D26_BMN_vs_NT[edgeRt_WT_D26_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D26_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_WT_D26_DAC_BMN_vs_NT_up <- edgeRt_WT_D26_DAC_BMN_vs_NT[edgeRt_WT_D26_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D26_DAC_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_WT_D26_DAC_BMN_vs_NT_down <- edgeRt_WT_D26_DAC_BMN_vs_NT[edgeRt_WT_D26_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_WT_D26_DAC_BMN_vs_NT$logFC < -1,]
-
-filter_FDR_0.05_KO_D5_DAC_vs_NT_up <- edgeRt_KO_D5_DAC_vs_NT[edgeRt_KO_D5_DAC_vs_NT$FDR < 0.05 & edgeRt_KO_D5_DAC_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D5_DAC_vs_NT_down <- edgeRt_KO_D5_DAC_vs_NT[edgeRt_KO_D5_DAC_vs_NT$FDR < 0.05 & edgeRt_KO_D5_DAC_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D5_BMN_vs_NT_up <- edgeRt_KO_D5_BMN_vs_NT[edgeRt_KO_D5_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D5_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D5_BMN_vs_NT_down <- edgeRt_KO_D5_BMN_vs_NT[edgeRt_KO_D5_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D5_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D5_DAC_BMN_vs_NT_up <- edgeRt_KO_D5_DAC_BMN_vs_NT[edgeRt_KO_D5_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D5_DAC_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D5_DAC_BMN_vs_NT_down <- edgeRt_KO_D5_DAC_BMN_vs_NT[edgeRt_KO_D5_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D5_DAC_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D16_DAC_vs_NT_up <- edgeRt_KO_D16_DAC_vs_NT[edgeRt_KO_D16_DAC_vs_NT$FDR < 0.05 & edgeRt_KO_D16_DAC_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D16_DAC_vs_NT_down <- edgeRt_KO_D16_DAC_vs_NT[edgeRt_KO_D16_DAC_vs_NT$FDR < 0.05 & edgeRt_KO_D16_DAC_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D16_BMN_vs_NT_up <- edgeRt_KO_D16_BMN_vs_NT[edgeRt_KO_D16_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D16_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D16_BMN_vs_NT_down <- edgeRt_KO_D16_BMN_vs_NT[edgeRt_KO_D16_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D16_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D16_DAC_BMN_vs_NT_up <- edgeRt_KO_D16_DAC_BMN_vs_NT[edgeRt_KO_D16_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D16_DAC_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D16_DAC_BMN_vs_NT_down <- edgeRt_KO_D16_DAC_BMN_vs_NT[edgeRt_KO_D16_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D16_DAC_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D26_DAC_vs_NT_up <- edgeRt_KO_D26_DAC_vs_NT[edgeRt_KO_D26_DAC_vs_NT$FDR < 0.05 & edgeRt_KO_D26_DAC_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D26_DAC_vs_NT_down <- edgeRt_KO_D26_DAC_vs_NT[edgeRt_KO_D26_DAC_vs_NT$FDR < 0.05 & edgeRt_KO_D26_DAC_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D26_BMN_vs_NT_up <- edgeRt_KO_D26_BMN_vs_NT[edgeRt_KO_D26_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D26_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D26_BMN_vs_NT_down <- edgeRt_KO_D26_BMN_vs_NT[edgeRt_KO_D26_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D26_BMN_vs_NT$logFC < -1,]
-filter_FDR_0.05_KO_D26_DAC_BMN_vs_NT_up <- edgeRt_KO_D26_DAC_BMN_vs_NT[edgeRt_KO_D26_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D26_DAC_BMN_vs_NT$logFC > 1,]
-filter_FDR_0.05_KO_D26_DAC_BMN_vs_NT_down <- edgeRt_KO_D26_DAC_BMN_vs_NT[edgeRt_KO_D26_DAC_BMN_vs_NT$FDR < 0.05 & edgeRt_KO_D26_DAC_BMN_vs_NT$logFC < -1,]
-
-#保存总list，各组差异基因list
+#save list
 write.table(SINE,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/SINE.txt",row.names = T,col.names = T,quote = F)
 write.table(LINE,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/LINE.txt",row.names = T,col.names = T,quote = F)
 write.table(LTR,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/LTR.txt",row.names = T,col.names = T,quote = F)
@@ -378,24 +176,6 @@ write.table(filter_FDR_0.05_D16_DAC_BMN_KO_vs_WT_up,"D:/Repeats_TE/transcriptid_
 write.table(filter_FDR_0.05_D26_DAC_KO_vs_WT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_DAC_KO_vs_WT_up.txt",row.names = T,col.names = T,quote = F)
 write.table(filter_FDR_0.05_D26_BMN_KO_vs_WT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_BMN_KO_vs_WT_up.txt",row.names = T,col.names = T,quote = F)
 write.table(filter_FDR_0.05_D26_DAC_BMN_KO_vs_WT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_DAC_BMN_KO_vs_WT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D5_DAC_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D5_DAC_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-#write.table(filter_FDR_0.05_WT_D5_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D5_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D5_DAC_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D5_DAC_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D16_DAC_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D16_DAC_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D16_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D16_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D16_DAC_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D16_DAC_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D26_DAC_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D26_DAC_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D26_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D26_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D26_DAC_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D26_DAC_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D5_DAC_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D5_DAC_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D5_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D5_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D5_DAC_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D5_DAC_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D16_DAC_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D16_DAC_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D16_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D16_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D16_DAC_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D16_DAC_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D26_DAC_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D26_DAC_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D26_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D26_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D26_DAC_BMN_vs_NT_up,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D26_DAC_BMN_vs_NT_up.txt",row.names = T,col.names = T,quote = F)
 
 #DOWN
 write.table(filter_FDR_0.05_NT_KO_vs_WT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/NT_KO_vs_WT_down.txt",row.names = T,col.names = T,quote = F)
@@ -408,21 +188,3 @@ write.table(filter_FDR_0.05_D16_DAC_BMN_KO_vs_WT_down,"D:/Repeats_TE/transcripti
 write.table(filter_FDR_0.05_D26_DAC_KO_vs_WT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_DAC_KO_vs_WT_down.txt",row.names = T,col.names = T,quote = F)
 write.table(filter_FDR_0.05_D26_BMN_KO_vs_WT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_BMN_KO_vs_WT_down.txt",row.names = T,col.names = T,quote = F)
 write.table(filter_FDR_0.05_D26_DAC_BMN_KO_vs_WT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_DAC_BMN_KO_vs_WT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D5_DAC_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D5_DAC_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-#write.table(filter_FDR_0.05_WT_D5_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D5_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D5_DAC_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D5_DAC_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D16_DAC_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D16_DAC_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-#write.table(filter_FDR_0.05_WT_D16_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D16_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D16_DAC_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D16_DAC_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D26_DAC_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D26_DAC_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D26_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D26_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_WT_D26_DAC_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/WT_D26_DAC_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D5_DAC_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D5_DAC_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D5_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D5_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D5_DAC_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D5_DAC_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D16_DAC_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D16_DAC_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D16_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D16_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D16_DAC_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D16_DAC_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D26_DAC_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D26_DAC_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D26_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D26_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)
-write.table(filter_FDR_0.05_KO_D26_DAC_BMN_vs_NT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/KO_D26_DAC_BMN_vs_NT_down.txt",row.names = T,col.names = T,quote = F)

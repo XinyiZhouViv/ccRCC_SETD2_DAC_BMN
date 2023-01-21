@@ -1,0 +1,43 @@
+#合并counts总表
+combined_x <- matrix(nr=551005,nc=20)
+combined_x[,1] <- rowMeans(x[,c(1,2)])
+combined_x[,2] <- rowMeans(x[,c(3,4)])
+combined_x[,3] <- rowMeans(x[,c(5,6)])
+combined_x[,4] <- rowMeans(x[,c(7,8)])
+combined_x[,5] <- rowMeans(x[,c(9,10)])
+combined_x[,6] <- rowMeans(x[,c(11,12)])
+combined_x[,7] <- rowMeans(x[,c(13,14)])
+combined_x[,8] <- rowMeans(x[,c(15,16)])
+combined_x[,9] <- rowMeans(x[,c(17,18)])
+combined_x[,10] <- rowMeans(x[,c(19,20)])
+combined_x[,11] <- rowMeans(x[,c(21,22)])
+combined_x[,12] <- rowMeans(x[,c(23,24)])
+combined_x[,13] <- rowMeans(x[,c(25,26)])
+combined_x[,14] <- rowMeans(x[,c(27,28)])
+combined_x[,15] <- rowMeans(x[,c(29,30)])
+combined_x[,16] <- rowMeans(x[,c(31,32)])
+combined_x[,17] <- rowMeans(x[,c(33,34)])
+combined_x[,18] <- rowMeans(x[,c(35,36)])
+combined_x[,19] <- rowMeans(x[,c(37,38)])
+combined_x[,20] <- rowMeans(x[,c(39,40)])
+colnames(combined_x) <- c("WT_NT","Day5_WT_BMN","Day16_WT_BMN","Day26_WT_BMN","Day5_WT_DAC","Day16_WT_DAC","Day26_WT_DAC","Day5_WT_DAC+BMN","Day16_WT_DAC+BMN","Day26_WT_DAC+BMN","KO_NT","Day5_KO_BMN","Day16_KO_BMN","Day26_KO_BMN","Day5_KO_DAC","Day16_KO_DAC","Day26_KO_DAC","Day5_KO_DAC+BMN","Day16_KO_DAC+BMN","Day26_KO_DAC+BMN")
+rownames(combined_x) <- rownames(x)
+#按TE,SINE,LINE和LTR分成4张表，包括总combined_x一起导出至excel (无需去除空值，因为只有计算z-score才会产生空值,无需分组,直接在excel操作)
+TEsum <- matrix(colSums(combined_x))
+rownames(TEsum) <- colnames(combined_x)
+write.table(TEsum,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/TEsum.txt",row.names = T,col.names = T,quote = F,sep = "\t")
+
+combined_x_SINE <- combined_x[row.names(combined_x)%in%row.names(SINE),]
+SINEsum <- matrix(colSums(combined_x_SINE))
+rownames(SINEsum) <- colnames(combined_x_SINE)
+write.table(SINEsum,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/SINEsum.txt",row.names = T,col.names = T,quote = F,sep = "\t")
+
+combined_x_LINE <- combined_x[row.names(combined_x)%in%row.names(LINE),]
+LINEsum <- matrix(colSums(combined_x_LINE))
+rownames(LINEsum) <- colnames(combined_x_LINE)
+write.table(LINEsum,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/LINEsum.txt",row.names = T,col.names = T,quote = F,sep = "\t")
+
+combined_x_LTR <- combined_x[row.names(combined_x)%in%row.names(LTR),]
+LTRsum <- matrix(colSums(combined_x_LTR))
+rownames(LTRsum) <- colnames(combined_x_LTR)
+write.table(LTRsum,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/LTRsum.txt",row.names = T,col.names = T,quote = F,sep = "\t")

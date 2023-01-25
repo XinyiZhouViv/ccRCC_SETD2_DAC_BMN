@@ -189,7 +189,6 @@ write.table(filter_FDR_0.05_D26_DAC_KO_vs_WT_down,"D:/Repeats_TE/transcriptid_re
 write.table(filter_FDR_0.05_D26_BMN_KO_vs_WT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_BMN_KO_vs_WT_down.txt",row.names = T,col.names = T,quote = F)
 write.table(filter_FDR_0.05_D26_DAC_BMN_KO_vs_WT_down,"D:/Repeats_TE/transcriptid_redoTE/TEdata_output/D26_DAC_BMN_KO_vs_WT_down.txt",row.names = T,col.names = T,quote = F)
 
-
 #KO vs WT
 #TE
 TE_up_KO_vs_WT_DAC <- c(row.names(D5_DAC_KO_vs_WT_up),row.names(D16_DAC_KO_vs_WT_up),row.names(D26_DAC_KO_vs_WT_up));TE_up_KO_vs_WT_DAC <- transform(TE_up_KO_vs_WT_DAC,duplication=duplicated(TE_up_KO_vs_WT_DAC))

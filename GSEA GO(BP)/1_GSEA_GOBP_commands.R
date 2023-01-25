@@ -173,6 +173,7 @@ Heatmap(mergemp_BMN,
         use_raster = TRUE,
         raster_quality = 2
 )
+
 ###screen out top 20 BMN GSEA GO pathways
 write.csv(mergemp_BMN,"mergemp_BMN.csv")
 mergempTOP20up_BMN<-read.csv("mergempTOP20up_BMN.csv",row.names = 1)
